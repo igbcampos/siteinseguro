@@ -13,6 +13,11 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed sb-sidenav-toggled">
+        {% if messages %}
+            {% for message in messages %}
+                <script> alert('{{message}}') </script>
+            {% endfor %}
+        {% endif %}
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand" href="{% url 'inicio' %}">Site Seguro</a>
             <!-- Navbar Search-->
@@ -76,7 +81,7 @@
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <form method="POST">
+                        <form action="{% url 'cadastrar_comentario' %}" method="POST">
                             {% csrf_token %}
                             <div class="modal-body">
                                 <div class="form-group">

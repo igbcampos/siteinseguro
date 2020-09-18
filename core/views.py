@@ -9,7 +9,7 @@ from . import models
 @login_required(login_url='/login')
 
 def inicio(request):
-    contexto = {'comentarios': models.Comentario.objects.all()}
+    contexto = {'comentarios': models.Comentario.objects.all().order_by('-data')}
     return render(request, 'index.html', contexto)
 
 def login(request):
@@ -42,18 +42,31 @@ def cadastrar(request):
             return render(request, 'cadastrar.html', {})
 
     if request.method == 'POST':
-        if(User.objects.filter(username=request.POST.get('email', '')).exists()):
-            messages.success(request, 'Email já cadastrado. Utilize outro email.')
+        try:
+            if(User.objects.filter(username=request.POST.get('email', '')).exists()):
+                messages.success(request, 'Email já cadastrado. Utilize outro email.')
+                return render(request, 'cadastrar.html', {'email': request.POST.get('email'), 'nome': request.POST.get('nome'), 'sobrenome': request.POST.get('sobrenome')})
+            else:
+                usuario = User.objects.create_user(request.POST.get('email', ''), request.POST.get('email', ''), request.POST.get('senha', ''))
+                usuario.first_name = request.POST.get('nome', '')
+                usuario.last_name = request.POST.get('sobrenome', '')
+                usuario.save()  
+                messages.success(request, 'Conta criada com sucesso. Faça Login')
+                return redirect('/login')
+        except:
+            messages.success(request, 'Não foi possível criar o cadastro. Tente novamente.')
             return render(request, 'cadastrar.html', {'email': request.POST.get('email'), 'nome': request.POST.get('nome'), 'sobrenome': request.POST.get('sobrenome')})
-        else:
-            usuario = User.objects.create_user(request.POST.get('email', ''), request.POST.get('email', ''), request.POST.get('senha', ''))
-            usuario.first_name = request.POST.get('nome', '')
-            usuario.last_name = request.POST.get('sobrenome', '')
-            usuario.save()  
-            messages.success(request, 'Conta criada com sucesso. Faça Login')
-            return redirect('/login')
 
 @login_required(login_url='/login')
 def deslogar(request):
     logout(request)
     return redirect('/login')
+
+@login_required(login_url='/login')
+def cadastrar_comentario(request):
+    try:
+        models.Comentario.objects.create(autor=request.user, titulo=request.POST.get('titulo',''), texto=request.POST.get('texto',''))
+        messages.success(request, 'Comentário criado com sucesso.')
+    except:
+        messages.success(request, 'Não foi possível criar o comentário. Tente novamente.')
+    return redirect('/')
