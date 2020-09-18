@@ -1,14 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, Http404
 from django.contrib.auth import authenticate, login as logar, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
+from . import models
 
 @login_required(login_url='/login')
 
 def inicio(request):
-    contexto = {}
+    contexto = {'comentarios': models.Comentario.objects.all()}
     return render(request, 'index.html', contexto)
 
 def login(request):
