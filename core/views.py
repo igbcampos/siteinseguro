@@ -12,7 +12,6 @@ def inicio(request):
     return render(request, 'index.html', contexto)
 
 def login(request):
-    contexto = {}
     if request.method == 'GET':
         if request.user.is_authenticated:
             return redirect('/')
@@ -33,3 +32,27 @@ def login(request):
             return render(request, 'login.html', contexto)
     else:
         raise Http404('Método de requisição não aceito')    
+
+def cadastrar(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            return redirect('/')
+        else:
+            return render(request, 'cadastrar.html', {})
+
+    if request.method == 'POST':
+        if(User.objects.filter(username=request.POST.get('email', '')).exists()):
+            messages.success(request, 'Email já cadastrado. Utilize outro email.')
+            return redirect('/cadastrar')
+        else:
+            usuario = User.objects.create_user(request.POST.get('email', ''), request.POST.get('email', ''), request.POST.get('senha', ''))
+            usuario.first_name = request.POST.get('nome', '')
+            usuario.last_name = request.POST.get('sobrenome', '')
+            usuario.save()  
+            messages.success(request, 'Conta criada com sucesso. Faça Login')
+            return redirect('/login')
+
+@login_required(login_url='/login')
+def deslogar(request):
+    logout(request)
+    return redirect('/login')
