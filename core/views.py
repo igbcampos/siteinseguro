@@ -43,7 +43,7 @@ def cadastrar(request):
     if request.method == 'POST':
         if(User.objects.filter(username=request.POST.get('email', '')).exists()):
             messages.success(request, 'Email já cadastrado. Utilize outro email.')
-            return redirect('/cadastrar')
+            return render(request, 'cadastrar.html', {'email': request.POST.get('email'), 'nome': request.POST.get('nome'), 'sobrenome': request.POST.get('sobrenome')})
         else:
             usuario = User.objects.create_user(request.POST.get('email', ''), request.POST.get('email', ''), request.POST.get('senha', ''))
             usuario.first_name = request.POST.get('nome', '')

@@ -26,37 +26,37 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
                                     <div class="card-body">
-                                        <form action="{% url 'cadastrar' %}" method="POST">
+                                        <form action="{% url 'cadastrar' %}" method="POST" id="formulario">
                                             {% csrf_token %}
                                             <div class="form-row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputFirstName">Nome</label>
-                                                        <input class="form-control py-4" id="inputFirstName" type="text" placeholder="Enter first name" name="nome" />
+                                                        <input class="form-control py-4" id="inputFirstName" type="text" placeholder="Enter first name" name="nome" value="{{nome}}" required />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputLastName">Sobrenome</label>
-                                                        <input class="form-control py-4" id="inputLastName" type="text" placeholder="Enter last name" name="sobrenome" />
+                                                        <input class="form-control py-4" id="inputLastName" type="text" placeholder="Enter last name" name="sobrenome" value="{{sobrenome}}" required />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                                <input class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" name="email" />
+                                                <input class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" name="email" value="{{email}}" required />
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputPassword">Senha</label>
-                                                        <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" name="senha" />
+                                                        <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" name="senha" required />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputConfirmPassword">Confirmar Senha</label>
-                                                        <input class="form-control py-4" id="inputConfirmPassword" type="password" placeholder="Confirm password" oninput="validarSenha()" />
+                                                        <input class="form-control py-4" id="inputConfirmPassword" type="password" placeholder="Confirm password" oninput="validarSenha()" required />
                                                         <div class= "invalid-feedback">Senhas diferentes</div>
                                                     </div>
                                                 </div>
@@ -100,6 +100,14 @@
                     $('#inputConfirmPassword').removeClass('is-invalid');
                 }
             }
+            $('#formulario').on('submit', function(e){
+                if($('#inputPassword').val() == $('#inputConfirmPassword').val()) {
+                    $(this).submit();
+                }
+                else{
+                    e.preventDefault();
+                }
+            })
         </script>
     </body>
 </html>
