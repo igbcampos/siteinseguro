@@ -21,8 +21,14 @@
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand" href="{% url 'inicio' %}">Site Seguro</a>
             <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-                
+            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" action="{% url 'inicio' %}" method="GET">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="busca" placeholder="Buscar comentário" aria-label="Search" aria-describedby="basic-addon2" value="{{ busca }}" />
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                    
             </form>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 Adicionar Comentário

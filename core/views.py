@@ -8,8 +8,11 @@ from . import models
 
 @login_required(login_url='/login')
 
-def inicio(request):
-    contexto = {'comentarios': models.Comentario.objects.all().order_by('-data')}
+def inicio(request, busca=None):
+    if request.GET.get('busca'):
+        contexto = {'comentarios': models.Comentario.objects.filter(titulo__contains=request.GET.get('busca')).order_by('-data'), 'busca': request.GET.get('busca')}
+    else:
+        contexto = {'comentarios': models.Comentario.objects.all().order_by('-data')}
     return render(request, 'index.html', contexto)
 
 def login(request):
