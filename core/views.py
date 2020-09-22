@@ -10,7 +10,8 @@ from . import models
 
 def inicio(request, busca=None):
     if request.GET.get('busca'):
-        contexto = {'comentarios': models.Comentario.objects.filter(titulo__contains=request.GET.get('busca')).order_by('-data'), 'busca': request.GET.get('busca')}
+        comentarios = models.Comentario.objects.filter(titulo__contains=request.GET.get('busca')).order_by('-data')
+        contexto = {'comentarios': comentarios, 'busca': request.GET.get('busca')}
     else:
         contexto = {'comentarios': models.Comentario.objects.all().order_by('-data')}
     return render(request, 'index.html', contexto)
