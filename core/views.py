@@ -5,12 +5,15 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from . import models
+from django.db import connection
 
 @login_required(login_url='/login')
 
-def inicio(request, busca=None):
-    if request.GET.get('busca'):
-        comentarios = models.Comentario.objects.filter(titulo__contains=request.GET.get('busca')).order_by('-data')
+def inicio(request):
+    if request.GET.get('busca'):        
+        with connection.cursor() as cursor:
+            cursor.executescript("SELECT * FROM core_comentario WHERE titulo LIKE '%%{}%%';".format(request.GET.get('busca')))
+            comentarios = cursor.fetchall()
         contexto = {'comentarios': comentarios, 'busca': request.GET.get('busca')}
     else:
         contexto = {'comentarios': models.Comentario.objects.all().order_by('-data')}
