@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Site Seguro - Comentários</title>
+        <title>Site Inseguro - Comentários</title>
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
@@ -19,11 +19,11 @@
             {% endfor %}
         {% endif %}
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="{% url 'inicio' %}">Site Seguro</a>
+            <a class="navbar-brand" href="{% url 'inicio' %}">Site Inseguro</a>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" action="{% url 'inicio' %}" method="GET">
                 <div class="input-group">
-                    <input class="form-control" type="text" name="busca" placeholder="Buscar comentário" aria-label="Search" aria-describedby="basic-addon2" value="{{ busca }}" />
+                    <input class="form-control" type="text" name="busca" placeholder="Buscar comentário" aria-label="Search" aria-describedby="basic-addon2" value="{{ busca|safe }}" />
                     <div class="input-group-append">
                         <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                     </div>
@@ -54,9 +54,9 @@
                         {% for comentario in comentarios %}
                             <div class="card mb-4">
                                 <div class="card-header">
-                                    {{comentario.titulo}}
+                                    {{comentario.titulo|safe}}
                                 </div>
-                                <div class="card-body">{{comentario.texto}}</div>
+                                <div class="card-body">{{comentario.texto|safe}}</div>
                                 <div class="card-footer small text-muted">Publicado em {{comentario.data}} Por {{comentario.autor.first_name}}</div>
                             </div>
                             {% empty %}
